@@ -1,7 +1,9 @@
-import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 
 import cart from './cart/reducer';
 
-export default combineReducers({
-  cart,
+export default configureStore({
+  reducer: {
+    cart,
+  },
 });
