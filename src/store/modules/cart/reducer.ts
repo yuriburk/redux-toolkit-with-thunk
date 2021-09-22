@@ -1,35 +1,30 @@
-import { Reducer } from 'redux';
-import produce from 'immer';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { CartActions } from './actions';
-
-const INITIAL_STATE: CartState = {
+const initialState: CartState = {
   items: [],
   productsIdWithoutStock: [],
 };
 
-const cart: Reducer<CartState> = (state, action) => {
-  return produce(state ?? INITIAL_STATE, draft => {
-    switch (action.type) {
-      case CartActions.addProductToCartSuccess:
-        const { product } = action.payload;
+const cartSlice = createSlice({
+  name: 'cart',
+  initialState,
+  reducers: {
+    addProductToCartSuccess: (state, action: PayloadAction<Product>) => {
+      const { payload: product } = action;
 
-        const productInCartIndex = draft.items.findIndex(item => item.product.id === product.id);
+      const productInCartIndex = state.items.findIndex(item => item.product.id === product.id);
 
-        if (productInCartIndex >= 0) {
-          draft.items[productInCartIndex].quantity++;
-        } else {
-          draft.items.push({ product, quantity: 1 });
-        }
+      if (productInCartIndex >= 0) {
+        state.items[productInCartIndex].quantity++;
+      } else {
+        state.items.push({ product, quantity: 1 });
+      }
+    },
+    addProductToCartFailure: (state, action: PayloadAction<number>) => {
+      const { payload: productId } = action;
+      state.productsIdWithoutStock.push(productId);
+    },
+  },
+});
 
-        break;
-      case CartActions.addProductToCartFailure:
-        draft.productsIdWithoutStock.push(action.payload.productId);
-        break;
-      default:
-        break;
-    }
-  });
-};
-
-export default cart;
+export default cartSlice;
