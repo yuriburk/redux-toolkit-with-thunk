@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addProductToCartRequest } from '../../store/modules/cart/actions';
+import { checkProductHasStock } from '../../store/features/cart/thunks';
 
 type CatalogItemComponentProps = {
   product: Product;
@@ -12,7 +12,7 @@ const CatalogItem = ({ product }: CatalogItemComponentProps) => {
   const isntAvailable = useSelector<State, boolean>(state => state.cart.productsIdWithoutStock.includes(product.id));
 
   const handleAddProductToCart = useCallback(() => {
-    dispatch(addProductToCartRequest(product));
+    dispatch(checkProductHasStock(product));
   }, [dispatch, product]);
 
   return (

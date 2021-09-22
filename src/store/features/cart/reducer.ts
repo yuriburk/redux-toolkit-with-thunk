@@ -10,6 +10,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addProductToCartSuccess: (state, action: PayloadAction<Product>) => {
+      console.log('success', { state, action });
       const { payload: product } = action;
 
       const productInCartIndex = state.items.findIndex(item => item.product.id === product.id);
@@ -21,6 +22,7 @@ const cartSlice = createSlice({
       }
     },
     addProductToCartFailure: (state, action: PayloadAction<number>) => {
+      console.log('failure', { state, action });
       const { payload: productId } = action;
       state.productsIdWithoutStock.push(productId);
     },
